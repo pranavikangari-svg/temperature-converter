@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thermé — Temperature Converter</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── BACKGROUND BLOBS ── -->
+  <div class="bg-blob blob-1" aria-hidden="true"></div>
+  <div class="bg-blob blob-2" aria-hidden="true"></div>
+  <div class="bg-blob blob-3" aria-hidden="true"></div>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-temperature-half"></i></span>
+        <span class="brand-name">Thermé</span>
+      </div>
+      <button id="themeToggle" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark / light mode">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="main-wrap">
+
+    <!-- Hero tagline -->
+    <section class="hero-section text-center" aria-label="Hero">
+      <p class="hero-eyebrow">Elegant &amp; Precise</p>
+      <h1 class="hero-title">Temperature<br /><em>Converter</em></h1>
+      <p class="hero-sub">Convert between Celsius, Fahrenheit &amp; Kelvin instantly.</p>
+    </section>
+
+    <!-- ── STATS DASHBOARD ── -->
+    <section class="stats-row" aria-label="Statistics">
+      <div class="stat-card" id="statTotal">
+        <i class="fa-solid fa-chart-simple stat-icon"></i>
+        <span class="stat-value" id="statTotalVal">0</span>
+        <span class="stat-label">Total Conversions</span>
+      </div>
+      <div class="stat-card" id="statUnit">
+        <i class="fa-solid fa-star stat-icon"></i>
+        <span class="stat-value" id="statUnitVal">—</span>
+        <span class="stat-label">Most-Used Unit</span>
+      </div>
+      <div class="stat-card" id="statTime">
+        <i class="fa-regular fa-clock stat-icon"></i>
+        <span class="stat-value" id="statTimeVal">—</span>
+        <span class="stat-label">Last Conversion</span>
+      </div>
+    </section>
+
+    <!-- ── CONVERTER CARD ── -->
+    <section class="converter-section" aria-label="Converter">
+      <div class="glass-card converter-card">
+
+        <div class="card-crown">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Convert Temperature</span>
+        </div>
+
+        <!-- Input Row -->
+        <div class="row g-3 mt-1">
+
+          <!-- Degrees Input -->
+          <div class="col-12 col-md-6">
+            <label class="field-label" for="tempInput">
+              <i class="fa-solid fa-pencil"></i> Degrees
+            </label>
+            <div class="input-wrap">
+              <input
+                type="number"
+                id="tempInput"
+                class="fancy-input"
+                placeholder="e.g. 72"
+                step="any"
+                aria-label="Temperature value"
+                autocomplete="off"
+              />
+              <span class="input-glow"></span>
+            </div>
+            <div class="field-error" id="inputError" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Unit Selector -->
+          <div class="col-12 col-md-6">
+            <label class="field-label" for="unitSelect">
+              <i class="fa-solid fa-sliders"></i> Type
+            </label>
+            <div class="select-wrap">
+              <select id="unitSelect" class="fancy-select" aria-label="Temperature unit">
+                <option value="C">🌡️ Celsius (°C)</option>
+                <option value="F" selected>🔥 Fahrenheit (°F)</option>
+                <option value="K">❄️ Kelvin (K)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-row mt-4">
+          <button id="convertBtn" class="btn-primary-custom" aria-label="Convert temperature">
+            <i class="fa-solid fa-rotate"></i>
+            <span>Convert</span>
+          </button>
+          <button id="clearBtn" class="btn-ghost-custom" aria-label="Clear all fields">
+            <i class="fa-solid fa-eraser"></i>
+            <span>Clear</span>
+          </button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection" aria-live="polite" aria-label="Conversion results">
+          <div class="results-divider">
+            <span>Results</span>
+          </div>
+          <div class="results-grid" id="resultsGrid">
+            <!-- Populated by JS -->
+          </div>
+          <button id="copyBtn" class="copy-btn" aria-label="Copy results to clipboard">
+            <i class="fa-regular fa-copy"></i> Copy Results
+          </button>
+        </div>
+
+        <!-- Error Banner -->
+        <div class="error-banner" id="errorBanner" role="alert" aria-live="assertive" style="display:none;">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span id="errorMsg">Please enter a valid number.</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── HISTORY SECTION ── -->
+    <section class="history-section" aria-label="Conversion history">
+      <div class="glass-card history-card">
+        <div class="history-header">
+          <div class="card-crown">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Conversion History</span>
+          </div>
+          <button id="downloadBtn" class="download-btn" aria-label="Download history as text file">
+            <i class="fa-solid fa-download"></i> Download
+          </button>
+        </div>
+
+        <div id="historyEmpty" class="history-empty">
+          <i class="fa-regular fa-folder-open"></i>
+          <p>No conversions yet.<br />Start converting above!</p>
+        </div>
+
+        <ul class="history-list" id="historyList" aria-label="History list">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── TOAST ── -->
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true">
+    <div class="toast-pill" id="toastPill">
+      <i class="fa-solid fa-check-circle"></i>
+      <span id="toastMsg">Copied!</span>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <p>Made with <i class="fa-solid fa-heart" style="color:#f472b6;"></i> for portfolio showcase &mdash; Thermé &copy; 2025</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
